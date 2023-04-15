@@ -3,6 +3,7 @@ ctypes.windll.kernel32.SetConsoleTitleW("nexus' shitty emone tool (GET RICH FAST
 import requests,json
 from time import sleep
 from random import random
+import threading
 warframe = ["ash",
             "atlas",
             "banshee",
@@ -112,11 +113,22 @@ def chkprice(part_suffix):
     print(f"###{part_suffix} end###")
 ###actually getting the prices
 
-chkprice('set')
-chkprice('blueprint')
-chkprice('chassis')
-chkprice('systems')
-chkprice('neuroptics')
+t1 = threading.Thread(target=chkprice, args=('set',))
+t2 = threading.Thread(target=chkprice, args=('blueprint',))
+t3 = threading.Thread(target=chkprice, args=('chassis',))
+t4 = threading.Thread(target=chkprice, args=('systems',))
+t5 = threading.Thread(target=chkprice, args=('neuroptics',))
+t1.start()
+t2.start()
+t3.start()
+t4.start()
+t5.start()
+# wait all threads
+t1.join()
+t2.join()
+t3.join()
+t4.join()
+t5.join()
 
 ###calculating "investment" and "return"
 
@@ -138,3 +150,4 @@ wfmtable.field_names = ["warframe","blueprint","systems","chassis","neuroptics",
 for warframeID in range(0,len(warframe)):
     wfmtable.add_row([warframe[warframeID],prices['blueprint'][warframeID],prices['systems'][warframeID],prices['chassis'][warframeID],prices['neuroptics'][warframeID],prices['set'][warframeID],prices['investment'][warframeID],prices['return'][warframeID]])
 print(wfmtable)
+
