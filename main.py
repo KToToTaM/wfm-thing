@@ -44,6 +44,7 @@ warframe = ["ash",
             "wukong",
             "zephyr"
             ]
+##warframes that have an extra _blueprint at the end of their API calls for some reason
 warframealtsuffix = ["khora",
                     "revenant",
                     "baruuk",
