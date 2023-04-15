@@ -1,5 +1,7 @@
+###setting a title for cool kid points
 import ctypes
 ctypes.windll.kernel32.SetConsoleTitleW("nexus' shitty emone tool (GET RICH FAST NOT CLICKBAIT 100%")
+
 import requests,json
 from time import sleep
 from random import random
