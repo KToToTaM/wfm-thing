@@ -109,7 +109,7 @@ def chkprice(part_suffix):
                 part_suffix = part_suffix[:-10] ### if we have _blueprint , we remove em 
                 
         prices[part_suffix].append(minprice)
-        print(f"{warframe[warframeID]} done")
+        print(f"{warframe[warframeID]} - {part_suffix} done")
     print(f"###{part_suffix} end###")
 ###actually getting the prices
 
