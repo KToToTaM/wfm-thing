@@ -168,7 +168,7 @@ for warframeID in range(0,len(warframe)):
 
 ###sort by grofit thanks elettro
 wfmtable.reversesort = True
-wfmtable.sortby("Grofit")
+wfmtable.sortby="Grofit"
 
 print(wfmtable)
 
