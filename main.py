@@ -1,15 +1,32 @@
 from random import random, choice
-
+import sys
+from math import ceil
 title = choice([
+"SIGMA GRINDSET I: Fear not poverty. Poverty is the bitter soil in which sweet desire blossoms.",
+"SIGMA GRINDSET II: Fortune despises the idle man. Stasis is death. Always move forward.",
+"SIGMA GRINDSET III: Be envious. Covet. Then take what you desire.",
+"SIGMA GRINDSET IV: Deception is the sword of wisdom. Be wise.",
+"SIGMA GRINDSET V: Beware the idle man who would lull you back into idleness.",
+"SIGMA GRINDSET VI: Contentment is idleness. Desire inspires action. Nurture all desires.",
+"SIGMA GRINDSET VII: Money begets money.",
+"SIGMA GRINDSET VIII: Charity is power. More charity is more power.",
+"SIGMA GRINDSET IX: Shun sentimentality. It is a weakness that binds the idle man.",
+"SIGMA GRINDSET X: Fulfill desire and others will follow.",
 "This is a journey into money...", ###doin` up the house
-"shitty warframe market warframe checking tool for checking prices of warframes in a game called warframe.",
+"shitty warframe market warframe checking tool for checking prices of warframes for a game called warframe.",
 "i forgor",
-"Also try Destiny 2!                        wait no actually dont please I beg of you",
-"How To Get Platinum FAST in Warframe 2023 - In Depth Guide (no)"
+"Also try Destiny 2!                                                       wait no actually dont please I beg of you",
+"How To Get Platinum FAST in Warframe 2023 - In Depth Guide (no)",
+"EXPLOIT THESE AND GET TONS OF FREE PLATINUM FAST & EASY IN WARFRAME NOW! | 2023 (no)",
+"apogus",
+"ez plat hack (riven mafia hates him!)",
+"https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 
 ])
 import ctypes
-ctypes.windll.kernel32.SetConsoleTitleW(title)
+kernel32 = ctypes.windll.kernel32
+kernel32.SetConsoleTitleW(title)
+kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 import requests,json
 from time import sleep
 
@@ -80,12 +97,15 @@ def wfmget(part_suffix, warframeID, try_number=1):
 def progress_bar(currentProgress, part_suffix, total=37):
     global warframe
     percentage = 100 * (currentProgress / float(total))
-    bar = '█' * int(percentage) + '-' * (100 - int(percentage))
+    bar = '█' * int(percentage) + '-' * ceil((100 - int(percentage)))
+    filler = ' ' * (15 - len(part_suffix) - 6)
+    sys.stdout.write("\033[F\033[F")
+    print(f"Checking {part_suffix}(s)...{filler}Status: {warframe[currentProgress].title()} Prime         \n|{bar}| {currentProgress}/{total}     ")
     
-    
-    print(f"Checking {part_suffix}(s)...     Current warframe: {warframe[currentProgress].title()} Prime\n\r|{bar}| {currentProgress}\{total}\r")
-    
-###im gonna need to do this shit ..4 times so im gonna yeet the entire thing into a func and pass the params that change.
+    if currentProgress == total:
+        sys.stdout.write("\033[F\033[F")
+        print(f"Checking {part_suffix}(s)...{filler}Status: Done!                                \n|{bar}| {currentProgress}/{total}     ")
+        print(f"\n\n")
 def chkprice(part_suffix):
     
     global prices
@@ -138,17 +158,18 @@ for warframeID in range(0,len(warframe)):
     prices['return'].append(prices['set'][warframeID]-prices['investment'][warframeID])
     
 ###printing out the info
-
-
-###|| Warframe || blueprint | systems | chassis | neuroptics || set | investment | return ||
-
 from prettytable import PrettyTable
 
 wfmtable = PrettyTable()
 
-wfmtable.field_names = ["warframe","blueprint","systems","chassis","neuroptics","set","Investment","grofit"]
+wfmtable.field_names = ["Prime","Blueprint","Systems","Chassis","Neuroptics","Set","Investment","Grofit"]
 for warframeID in range(0,len(warframe)):
-    wfmtable.add_row([warframe[warframeID],prices['blueprint'][warframeID],prices['systems'][warframeID],prices['chassis'][warframeID],prices['neuroptics'][warframeID],prices['set'][warframeID],prices['investment'][warframeID],prices['return'][warframeID]])
+    wfmtable.add_row([warframe[warframeID].title(),prices['blueprint'][warframeID],prices['systems'][warframeID],prices['chassis'][warframeID],prices['neuroptics'][warframeID],prices['set'][warframeID],prices['investment'][warframeID],prices['return'][warframeID]])
+
+###sort by grofit thanks elettro
+wfmtable.reversesort = True
+wfmtable.sortby("Grofit")
+
 print(wfmtable)
 
-dont_close_blyat = input("press anythin to close mate")
+input("")
