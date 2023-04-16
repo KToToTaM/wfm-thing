@@ -1,8 +1,18 @@
+from random import random, choice
+
+title = choice([
+"This is a journey into money...", ###doin` up the house
+"shitty warframe market warframe checking tool for checking prices of warframes in a game called warframe.",
+"i forgor",
+"Also try Destiny 2!                        wait no actually dont please I beg of you",
+"How To Get Platinum FAST in Warframe 2023 - In Depth Guide (no)"
+
+])
 import ctypes
-ctypes.windll.kernel32.SetConsoleTitleW("nexus' shitty emone tool (GET RICH FAST NOT CLICKBAIT 100%")
+ctypes.windll.kernel32.SetConsoleTitleW(title)
 import requests,json
 from time import sleep
-from random import random
+
 warframe = ["ash",
             "atlas",
             "banshee",
@@ -74,7 +84,7 @@ def progress_bar(currentProgress, part_suffix, total=37):
     
     
     print(f"Checking {part_suffix}(s)...     Current warframe: {warframe[currentProgress].title()} Prime\n\r|{bar}| {currentProgress}\{total}\r")
-    sys.stdout.write("\033[F")
+    
 ###im gonna need to do this shit ..4 times so im gonna yeet the entire thing into a func and pass the params that change.
 def chkprice(part_suffix):
     
