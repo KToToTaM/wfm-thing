@@ -114,7 +114,7 @@ def progress_bar(currentProgress, part_suffix, total=37):
     global warframe
     percentage = 100 * (currentProgress / float(total))
     bar = '█' * int(percentage) + '-' * ceil((100 - int(percentage)))
-    filler = ' ' * (15 - len(part_suffix) - 6)
+    filler = ' ' * (20 - len(part_suffix) - 6)
     sys.stdout.write("\033[F\033[F")
     print(f"Checking {part_suffix}(s)...{filler}Status: {warframe[currentProgress].title()} Prime         \n|{bar}| {currentProgress}/{total}     ")
     
@@ -188,24 +188,20 @@ for warframeID in range(0,len(warframe)):
 from prettytable import PrettyTable
 
 wfmtable = PrettyTable()
-
-wfmtable.field_names = ["Prime","Blueprint","Systems","Chassis","Neuroptics","Set","Investment","Grofit","grofitingame"] ### grofitingame is used for sorting then removed
+print("\033[38;2;203;186;238mONLINE IN GAME\033[0m  \033[38;2;155;255;155mONLINE\033[0m")
+wfmtable.field_names = ["Prime","Blueprint","Systems","Chassis","Neuroptics","Set","Investment","Grofit"] ### grofitingame is used for sorting then removed
 for warframeID in range(0,len(warframe)):
-    wfmtable.add_row([warframe[warframeID].title(),
-                                                   f"\033[38;2;203;186;238m{prices['blueprint']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['blueprint']['Online'][warframeID]}\033[0m",
-                                                   f"\033[38;2;203;186;238m{prices['systems']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['systems']['Online'][warframeID]}\033[0m",
-                                                   f"\033[38;2;203;186;238m{prices['chassis']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['chassis']['Online'][warframeID]}\033[0m",
-                                                   f"\033[38;2;203;186;238m{prices['neuroptics']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['neuroptics']['Online'][warframeID]}\033[0m",
-                                                   f"\033[38;2;203;186;238m{prices['set']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['set']['Online'][warframeID]}\033[0m",
-                                                   f"\033[38;2;203;186;238m{prices['investment']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['investment']['Online'][warframeID]}\033[0m",
-                                                   f"\033[38;2;203;186;238m{prices['grofit']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['grofit']['Online'][warframeID]}\033[0m",
-                                                   prices['grofit']['Ingame'][warframeID]
-                                                   ])
-
-###sort by grofit thanks elettro
-wfmtable.reversesort = True
-wfmtable.sortby="grofitingame"
-wfmtable.del_column("grofitingame")
+    sortID = prices['grofit']['Ingame'].index(max(prices['grofit']['Ingame'])) ###weird shit but it works and it works efficiently i think
+    wfmtable.add_row([warframe[sortID].title(), 
+                    f"\033[38;2;203;186;238m{prices['blueprint']['Ingame'][sortID]}\033[0m  \033[38;2;155;255;155m{prices['blueprint']['Online'][sortID]}\033[0m",
+                    f"\033[38;2;203;186;238m{prices['systems']['Ingame'][sortID]}\033[0m  \033[38;2;155;255;155m{prices['systems']['Online'][sortID]}\033[0m",
+                    f"\033[38;2;203;186;238m{prices['chassis']['Ingame'][sortID]}\033[0m  \033[38;2;155;255;155m{prices['chassis']['Online'][sortID]}\033[0m",
+                    f"\033[38;2;203;186;238m{prices['neuroptics']['Ingame'][sortID]}\033[0m   \033[38;2;155;255;155m{prices['neuroptics']['Online'][sortID]}\033[0m",
+                    f"\033[38;2;203;186;238m{prices['set']['Ingame'][sortID]}\033[0m   \033[38;2;155;255;155m{prices['set']['Online'][sortID]}\033[0m",
+                    f"\033[38;2;203;186;238m{prices['investment']['Ingame'][sortID]}\033[0m   \033[38;2;155;255;155m{prices['investment']['Online'][sortID]}\033[0m",
+                    f"\033[38;2;203;186;238m{prices['grofit']['Ingame'][sortID]}   \033[0m\033[38;2;155;255;155m{prices['grofit']['Online'][sortID]}\033[0m"
+                    ])
+    prices['grofit']['Ingame'][sortID] = min(prices['grofit']['Ingame'])-1 
 
 print(wfmtable)
 
