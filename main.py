@@ -1,3 +1,6 @@
+
+ENABLE_RULER_BG = True
+
 from random import random, choice
 import sys
 from math import ceil
@@ -192,16 +195,21 @@ print("\033[38;2;203;186;238mONLINE IN GAME\033[0m  \033[38;2;155;255;155mONLINE
 wfmtable.field_names = ["Prime","Blueprint","Systems","Chassis","Neuroptics","Set","Investment","Grofit"] ### grofitingame is used for sorting then removed
 for warframeID in range(0,len(warframe)):
     sortID = prices['grofit']['Ingame'].index(max(prices['grofit']['Ingame'])) ###weird shit but it works and it works efficiently i think
-    wfmtable.add_row([warframe[sortID].title(), 
-                    f"\033[38;2;203;186;238m{prices['blueprint']['Ingame'][sortID]}\033[0m  \033[38;2;155;255;155m{prices['blueprint']['Online'][sortID]}\033[0m",
-                    f"\033[38;2;203;186;238m{prices['systems']['Ingame'][sortID]}\033[0m  \033[38;2;155;255;155m{prices['systems']['Online'][sortID]}\033[0m",
-                    f"\033[38;2;203;186;238m{prices['chassis']['Ingame'][sortID]}\033[0m  \033[38;2;155;255;155m{prices['chassis']['Online'][sortID]}\033[0m",
-                    f"\033[38;2;203;186;238m{prices['neuroptics']['Ingame'][sortID]}\033[0m   \033[38;2;155;255;155m{prices['neuroptics']['Online'][sortID]}\033[0m",
-                    f"\033[38;2;203;186;238m{prices['set']['Ingame'][sortID]}\033[0m   \033[38;2;155;255;155m{prices['set']['Online'][sortID]}\033[0m",
-                    f"\033[38;2;203;186;238m{prices['investment']['Ingame'][sortID]}\033[0m   \033[38;2;155;255;155m{prices['investment']['Online'][sortID]}\033[0m",
-                    f"\033[38;2;203;186;238m{prices['grofit']['Ingame'][sortID]}   \033[0m\033[38;2;155;255;155m{prices['grofit']['Online'][sortID]}\033[0m"
+    
+    if warframeID % 2 == 1 and ENABLE_RULER_BG == True:
+        bgcolor = "\033[48;2;46;52;64m"
+    else: bgcolor = ""
+    
+    wfmtable.add_row([bgcolor + warframe[sortID].title(), 
+                    f"\033[38;2;203;186;238m{prices['blueprint']['Ingame'][sortID]}\033[39m  \033[38;2;155;255;155m{prices['blueprint']['Online'][sortID]}\033[39m",
+                    f"\033[38;2;203;186;238m{prices['systems']['Ingame'][sortID]}\033[39m  \033[38;2;155;255;155m{prices['systems']['Online'][sortID]}\033[39m",
+                    f"\033[38;2;203;186;238m{prices['chassis']['Ingame'][sortID]}\033[39m  \033[38;2;155;255;155m{prices['chassis']['Online'][sortID]}\033[39m",
+                    f"\033[38;2;203;186;238m{prices['neuroptics']['Ingame'][sortID]}\033[39m   \033[38;2;155;255;155m{prices['neuroptics']['Online'][sortID]}\033[39m",
+                    f"\033[38;2;203;186;238m{prices['set']['Ingame'][sortID]}\033[39m   \033[38;2;155;255;155m{prices['set']['Online'][sortID]}\033[39m",
+                    f"\033[38;2;203;186;238m{prices['investment']['Ingame'][sortID]}\033[39m   \033[38;2;155;255;155m{prices['investment']['Online'][sortID]}\033[39m",
+                    f"\033[38;2;203;186;238m{prices['grofit']['Ingame'][sortID]}   \033[39m\033[38;2;155;255;155m{prices['grofit']['Online'][sortID]}\033[0m"
                     ])
-    prices['grofit']['Ingame'][sortID] = min(prices['grofit']['Ingame'])-1 
+    prices['grofit']['Ingame'][sortID] = min(prices['grofit']['Ingame'])-1 ###making sure the max number is different each time
 
 print(wfmtable)
 
