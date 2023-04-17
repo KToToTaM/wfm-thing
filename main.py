@@ -12,6 +12,8 @@ title = choice([
 "SIGMA GRINDSET VIII: Charity is power. More charity is more power.",
 "SIGMA GRINDSET IX: Shun sentimentality. It is a weakness that binds the idle man.",
 "SIGMA GRINDSET X: Fulfill desire and others will follow.",
+
+
 "This is a journey into money...", ###doin` up the house
 "shitty warframe market warframe checking tool for checking prices of warframes for a game called warframe.",
 "i forgor",
@@ -21,7 +23,7 @@ title = choice([
 "apogus",
 "ez plat hack (riven mafia hates him!)",
 "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-
+"rv/pv is a good clan trust me      Source: bro just trust me"
 ])
 import ctypes
 kernel32 = ctypes.windll.kernel32
@@ -75,13 +77,27 @@ warframealtsuffix = ["khora",
                     "hildryn"
                     ]
             
-prices = { 'set':[],
-           'blueprint':[],
-           'systems':[],
-           'chassis':[],
-           'neuroptics':[],
-           'investment':[],
-           'return':[]
+prices = { 'set':{
+                "Online":[],
+                "Ingame":[]},
+            'blueprint':{
+                "Online":[],
+                "Ingame":[]},
+            'systems':{
+                "Online":[],
+                "Ingame":[]},
+            'chassis':{
+                "Online":[],                          
+                "Ingame":[]},                          
+           'neuroptics':{
+                "Online":[],
+                "Ingame":[]},
+           'investment':{
+                "Online":[],
+                "Ingame":[]},
+           'grofit':{
+                "Online":[],
+                "Ingame":[]},
            }
          
 ###pulling stuff from warframe market, if fails it retries
@@ -126,20 +142,29 @@ def chkprice(part_suffix):
         rWFMget = wfmget(part_suffix,warframeID)
 
         ###filtering out what we need, and throwing away the unneeded
-        minprice = []
+        priceIngame = []
         for orderID in range(0,len(rWFMget)):
             if rWFMget[orderID]['order_type'] == 'sell' and rWFMget[orderID]['user']['status'] == 'ingame':
-                minprice.append(rWFMget[orderID]['platinum'])
+                priceIngame.append(rWFMget[orderID]['platinum'])
                 
-        
-        minprice = min(minprice)
+        try: priceIngame = min(priceIngame)
+        except ValueError: priceIngame = 0 ##If it don't exist , make it 0 so the script doesnt die
+        priceOnline = []
+        for orderID in range(0,len(rWFMget)):
+            if rWFMget[orderID]['order_type'] == 'sell' and rWFMget[orderID]['user']['status'] == 'online':
+                priceOnline.append(rWFMget[orderID]['platinum'])
+                
+        try: priceOnline = min(priceOnline)
+        except ValueError: priceOnline = 0 ##If it don't exist , make it 0 so the script doesnt die
         
         ###another patch because whooooops , apparently adding _blueprint results in a KeyError :clueless:
         
         if part_suffix in ('chassis_blueprint','systems_blueprint','neuroptics_blueprint'):
                 part_suffix = part_suffix[:-10] ### if we have _blueprint , we remove em 
-                
-        prices[part_suffix].append(minprice)
+       # f"\033[38;2;203;186;238m{prices['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['Online'][warframeID]}\033[0m" ##ANSI color coding
+        
+        prices[part_suffix]['Online'].append(priceOnline)
+        prices[part_suffix]['Ingame'].append(priceIngame)
         
     
 ###actually getting the prices
@@ -153,22 +178,34 @@ chkprice('neuroptics')
 ###calculating "investment" and "return"
 
 for warframeID in range(0,len(warframe)):
-    prices['investment'].append(prices['blueprint'][warframeID]+prices['chassis'][warframeID]+prices['systems'][warframeID]+prices['neuroptics'][warframeID])
+    prices['investment']['Online'].append(prices['blueprint']['Online'][warframeID]+prices['chassis']['Online'][warframeID]+prices['systems']['Online'][warframeID]+prices['neuroptics']['Online'][warframeID])
+    prices['investment']['Ingame'].append(prices['blueprint']['Ingame'][warframeID]+prices['chassis']['Ingame'][warframeID]+prices['systems']['Ingame'][warframeID]+prices['neuroptics']['Ingame'][warframeID])
     
-    prices['return'].append(prices['set'][warframeID]-prices['investment'][warframeID])
+    prices['grofit']['Online'].append(prices['set']['Online'][warframeID]-prices['investment']['Online'][warframeID])
+    prices['grofit']['Ingame'].append(prices['set']['Ingame'][warframeID]-prices['investment']['Ingame'][warframeID])
     
 ###printing out the info
 from prettytable import PrettyTable
 
 wfmtable = PrettyTable()
 
-wfmtable.field_names = ["Prime","Blueprint","Systems","Chassis","Neuroptics","Set","Investment","Grofit"]
+wfmtable.field_names = ["Prime","Blueprint","Systems","Chassis","Neuroptics","Set","Investment","Grofit","grofitingame"] ### grofitingame is used for sorting then removed
 for warframeID in range(0,len(warframe)):
-    wfmtable.add_row([warframe[warframeID].title(),prices['blueprint'][warframeID],prices['systems'][warframeID],prices['chassis'][warframeID],prices['neuroptics'][warframeID],prices['set'][warframeID],prices['investment'][warframeID],prices['return'][warframeID]])
+    wfmtable.add_row([warframe[warframeID].title(),
+                                                   f"\033[38;2;203;186;238m{prices['blueprint']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['blueprint']['Online'][warframeID]}\033[0m",
+                                                   f"\033[38;2;203;186;238m{prices['systems']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['systems']['Online'][warframeID]}\033[0m",
+                                                   f"\033[38;2;203;186;238m{prices['chassis']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['chassis']['Online'][warframeID]}\033[0m",
+                                                   f"\033[38;2;203;186;238m{prices['neuroptics']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['neuroptics']['Online'][warframeID]}\033[0m",
+                                                   f"\033[38;2;203;186;238m{prices['set']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['set']['Online'][warframeID]}\033[0m",
+                                                   f"\033[38;2;203;186;238m{prices['investment']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['investment']['Online'][warframeID]}\033[0m",
+                                                   f"\033[38;2;203;186;238m{prices['grofit']['Ingame'][warframeID]}\033[0m | \033[38;2;155;255;155m{prices['grofit']['Online'][warframeID]}\033[0m",
+                                                   prices['grofit']['Ingame'][warframeID]
+                                                   ])
 
 ###sort by grofit thanks elettro
 wfmtable.reversesort = True
-wfmtable.sortby="Grofit"
+wfmtable.sortby="grofitingame"
+wfmtable.del_column("grofitingame")
 
 print(wfmtable)
 
